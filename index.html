@@ -193,8 +193,7 @@
       border: 1px solid var(--line);
       box-shadow: 0 10px 40px rgba(20, 50, 60, 0.06);
     }
-    #cal-inline { width: 100%; min-height: 0; overflow: hidden; border-radius: 12px; }
-    .booking-box.loaded #cal-inline { min-height: 640px; }
+    #booking-embed iframe { width: 100%; height: 720px; border: 0; border-radius: 12px; display: block; }
     .booking-box.loaded #booking-fallback { display: none; }
     .booking-placeholder {
       height: 320px; display: flex; flex-direction: column; gap: 16px;
@@ -439,8 +438,8 @@
         <p>Válassza ki az Önnek megfelelő időpontot – a visszaigazolást azonnal megkapja e-mailben.</p>
       </div>
       <div class="booking-box">
-        <!-- Ide tölti be a Cal.com a szabad időpontokat (a lap alján lévő CAL_USER beállítás alapján) -->
-        <div id="cal-inline"></div>
+        <!-- Ide töltődik be a Google foglalási naptár (a lap alján lévő GCAL_URL beállítás alapján) -->
+        <div id="booking-embed"></div>
         <!-- Ez akkor látszik, ha még nincs beállítva a Cal.com, vagy nem tölt be a naptár -->
         <div class="booking-placeholder" id="booking-fallback">
           <p>Itt jelenik meg a foglalási naptár a szabad időpontokkal.</p>
@@ -500,36 +499,24 @@
     </div>
   </footer>
 
-  <!-- ===== IDŐPONTFOGLALÁS (Cal.com) =====
-       SZERKESZTENDŐ: írd be a Cal.com felhasználónevet (cal.com/EZ-A-RÉSZ).
+  <!-- ===== IDŐPONTFOGLALÁS (Google Naptár) =====
+       SZERKESZTENDŐ: másold be a Google foglalási oldal linkjét az idézőjelek közé.
+       Honnan: Google Naptár → a foglalási naptárra kattintva → Megosztás → „Webhelyre ágyazás”
+       → az ott látható kódból a src="..." részben lévő link
+       (így kezdődik: https://calendar.google.com/calendar/appointments/schedules/...).
        Ha üresen marad, a helyőrző doboz látszik. -->
   <script>
-    const CAL_USER = "";            // pl. "optivista"
-    const CAL_COLOR = "#1f7a7a";    // a gombok/kiemelések színe a naptárban
+    const GCAL_URL = "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1ofuBfhp50uN3J_CUq-ok47kifgj37va6ANPdS7YjeZiBw6vU1TTru_zvsU4IKe9-pIMKXxZoy?gv=true";
 
-    const bookingLink = document.getElementById("booking-link");
-    if (CAL_USER) {
-      bookingLink.href = "https://cal.com/" + CAL_USER;
-
-      // A Cal.com hivatalos beágyazó kódja
-      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-
-      Cal("init", { origin: "https://cal.com" });
-      Cal("inline", {
-        elementOrSelector: "#cal-inline",
-        calLink: CAL_USER,
-        config: { layout: "month_view" }
-      });
-      Cal("ui", {
-        theme: "light",
-        cssVarsPerTheme: { light: { "cal-brand": CAL_COLOR } },
-        hideEventTypeDetails: false,
-        layout: "month_view"
-      });
-      // Ha a naptár betöltött, elrejtjük a helyőrzőt
-      Cal("on", { action: "linkReady", callback: () => {
-        document.querySelector(".booking-box").classList.add("loaded");
-      }});
+    if (GCAL_URL) {
+      const box = document.querySelector(".booking-box");
+      const frame = document.createElement("iframe");
+      frame.src = GCAL_URL.includes("gv=true") ? GCAL_URL : GCAL_URL + (GCAL_URL.includes("?") ? "&" : "?") + "gv=true";
+      frame.title = "Időpontfoglalás";
+      frame.loading = "lazy";
+      document.getElementById("booking-embed").appendChild(frame);
+      document.getElementById("booking-link").href = GCAL_URL.replace(/[?&]gv=true/, "");
+      box.classList.add("loaded");
     }
   </script>
 
