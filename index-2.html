@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OptiVista – Látásterápia gyermekeknek és felnőtteknek</title>
+  <meta name="description" content="OptiVista látásterápia: funkcionális látásvizsgálat és egyéni látásfejlesztő program gyermekeknek és felnőtteknek. Foglaljon időpontot online.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f9f9;
+      --surface: #ffffff;
+      --ink: #1f2d33;
+      --muted: #5c6b72;
+      --accent: #1f7a7a;       /* fő színárnyalat – itt módosítható */
+      --accent-dark: #155b5b;
+      --soft: #e2efee;
+      --line: #dde8e8;
+      --radius: 14px;
+      --max: 1080px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      font-size: 17px;
+    }
+    h1, h2, h3 { font-family: "Fraunces", Georgia, serif; font-weight: 600; line-height: 1.2; }
+    a { color: var(--accent-dark); }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* Fejléc */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(246, 249, 249, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { font-family: "Fraunces", serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    .nav ul { display: flex; gap: 26px; list-style: none; align-items: center; }
+    .nav a { text-decoration: none; color: var(--ink); font-weight: 500; font-size: 0.95rem; }
+    .nav a:hover { color: var(--accent); }
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff !important;
+      padding: 12px 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--accent-dark); }
+    .btn.small { padding: 8px 18px; font-size: 0.9rem; }
+    .btn.ghost { background: transparent; color: var(--ink) !important; border: 1.5px solid var(--ink); }
+    .btn.ghost:hover { background: var(--ink); color: #fff !important; }
+
+    /* Nyitó rész */
+    .hero { padding: 96px 0 80px; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+    .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin-bottom: 20px; }
+    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 38ch; margin-bottom: 32px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-img {
+      aspect-ratio: 4 / 5;
+      border-radius: 24px;
+      background: var(--soft) center / cover no-repeat;
+      /* Fotó: background-image: url("foto.jpg"); */
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.9rem;
+    }
+
+    /* Szakaszok */
+    section { padding: 88px 0; }
+    .section-head { max-width: 640px; margin-bottom: 48px; }
+    .section-head h2 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 12px; }
+    .section-head p { color: var(--muted); }
+    .alt { background: var(--surface); }
+
+    /* Mi a látásterápia */
+    .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .intro-grid p { color: var(--muted); margin-bottom: 16px; }
+    .skills { list-style: none; display: grid; gap: 12px; }
+    .skills li {
+      background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+      padding: 14px 18px;
+    }
+    .skills strong { display: block; color: var(--ink); }
+    .skills span { color: var(--muted); font-size: 0.95rem; }
+
+    /* Kinek ajánlott */
+    .signs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; list-style: none; }
+    .signs li {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
+    }
+    .signs li::before {
+      content: ""; flex: 0 0 10px; height: 10px; margin-top: 8px;
+      border-radius: 50%; background: var(--accent);
+    }
+    .note { margin-top: 28px; color: var(--muted); font-size: 0.95rem; max-width: 720px; }
+
+    /* Lépések */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; counter-reset: step; }
+    .step { position: relative; padding-top: 56px; }
+    .step::before {
+      counter-increment: step; content: counter(step);
+      position: absolute; top: 0; left: 0;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--soft); color: var(--accent-dark);
+      font-family: "Fraunces", serif; font-weight: 600; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step h3 { font-size: 1.2rem; margin-bottom: 6px; }
+    .step p { color: var(--muted); }
+
+    /* Szolgáltatások */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex; flex-direction: column;
+    }
+    .card h3 { font-size: 1.3rem; margin-bottom: 8px; }
+    .card p { color: var(--muted); margin-bottom: 16px; flex: 1; }
+    .price { font-weight: 600; color: var(--accent-dark); }
+
+    /* Rólam */
+    .about-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 56px; align-items: center; }
+    .about-img { aspect-ratio: 1; border-radius: 50%; background: var(--soft) center / cover no-repeat; max-width: 340px; display:flex; align-items:center; justify-content:center; color: var(--muted); font-size: 0.9rem; }
+    .about-grid p { margin-bottom: 16px; color: var(--muted); }
+
+    /* GYIK */
+    .faq { max-width: 760px; }
+    .faq details {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+      padding: 18px 22px; margin-bottom: 12px;
+    }
+    .faq summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; color: var(--accent); font-size: 1.3rem; line-height: 1; }
+    .faq details[open] summary::after { content: "–"; }
+    .faq details p { color: var(--muted); margin-top: 12px; }
+
+    /* Foglalás */
+    .booking-box {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 40px rgba(20, 50, 60, 0.06);
+    }
+    .booking-box iframe { width: 100%; height: 640px; border: 0; border-radius: 12px; display: block; }
+    .booking-placeholder {
+      height: 320px; display: flex; flex-direction: column; gap: 16px;
+      align-items: center; justify-content: center; text-align: center;
+      color: var(--muted); padding: 24px;
+    }
+
+    /* Kapcsolat */
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+    .contact-item h3 { font-family: "Inter", sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 6px; }
+    .contact-item p, .contact-item a { font-size: 1.05rem; color: var(--ink); text-decoration: none; }
+    .contact-item a:hover { color: var(--accent); }
+
+    footer { padding: 32px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; text-align: center; }
+
+    /* Mobil */
+    @media (max-width: 860px) {
+      .nav ul li:not(:last-child) { display: none; }
+      .hero { padding: 56px 0; }
+      .hero-grid, .about-grid, .intro-grid { grid-template-columns: 1fr; gap: 36px; }
+      .hero-img { aspect-ratio: 16 / 10; }
+      .about-img { margin: 0 auto; max-width: 220px; }
+      section { padding: 64px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap nav">
+      <a href="#" class="logo">Opti<span>Vista</span></a>
+      <ul>
+        <li><a href="#latasterapia">Látásterápia</a></li>
+        <li><a href="#szolgaltatasok">Szolgáltatások</a></li>
+        <li><a href="#rolam">Rólam</a></li>
+        <li><a href="#gyik">GYIK</a></li>
+        <li><a href="#kapcsolat">Kapcsolat</a></li>
+        <li><a href="#foglalas" class="btn small">Időpontfoglalás</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- NYITÓ -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Látásterápia · gyermekeknek és felnőtteknek</p>
+        <h1>A jó látás több, mint éles látás</h1>
+        <p>Segítünk, hogy a két szem összehangoltan, fáradás nélkül dolgozzon – olvasáskor, tanuláskor, képernyő előtt és a mindennapokban.</p>
+        <div class="hero-actions">
+          <a href="#foglalas" class="btn">Időpontot foglalok</a>
+          <a href="#latasterapia" class="btn ghost">Mi a látásterápia?</a>
+        </div>
+      </div>
+      <div class="hero-img">Fotó helye</div>
+    </div>
+  </section>
+
+  <!-- MI A LÁTÁSTERÁPIA -->
+  <section id="latasterapia" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Mi a látásterápia?</h2>
+        <p>Személyre szabott gyakorlatsor, amely a látórendszer képességeit fejleszti.</p>
+      </div>
+      <div class="intro-grid">
+        <div>
+          <p>Előfordul, hogy valaki a szemüvegvizsgálaton „tökéletes” eredményt kap, mégis gyorsan elfárad olvasás közben, sorokat ugrik át, vagy fejfájással küzd a képernyő előtt. Ennek hátterében gyakran nem az élesség, hanem a <strong>látási készségek</strong> – például a két szem együttműködése vagy a fókuszálás – gyengesége áll.</p>
+          <p>A látásterápia során egy alapos felmérés után célzott, fokozatosan nehezedő gyakorlatokkal fejlesztjük ezeket a készségeket. A foglalkozások rendszeres rendelői alkalmakból és rövid otthoni gyakorlásból állnak.</p>
+        </div>
+        <ul class="skills">
+          <li><strong>Két szem együttműködése</strong><span>hogy a szemek pontosan egy pontra nézzenek, kettőslátás és megerőltetés nélkül</span></li>
+          <li><strong>Fókuszálás</strong><span>gyors, kényelmes váltás közeli és távoli tárgyak között</span></li>
+          <li><strong>Szemmozgások</strong><span>pontos követés és sorról sorra haladás olvasáskor</span></li>
+          <li><strong>Vizuális feldolgozás</strong><span>a látott információ gyors és pontos értelmezése</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- KINEK AJÁNLOTT -->
+  <section id="kinek">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Kinek ajánlott?</h2>
+        <p>Érdemes felmérést kérni, ha Ön vagy gyermeke az alábbiak közül többet is tapasztal:</p>
+      </div>
+      <ul class="signs">
+        <li>Olvasás közben gyorsan elfárad, a betűk „mozognak” vagy összefolynak</li>
+        <li>Sorokat ugrik át, ujjal kell követnie a szöveget</li>
+        <li>Gyakori fejfájás vagy szemfáradtság tanulás, képernyőhasználat után</li>
+        <li>Időnként kettőslátás vagy homályos látás közelre</li>
+        <li>Rövid ideig tud koncentrálni a közeli feladatokra</li>
+        <li>Ügyetlenség, nehézség a labdajátékokban vagy a távolságbecslésben</li>
+        <li>Kancsalság vagy tompalátás miatti kezelés kiegészítéseként</li>
+        <li>Sok képernyő előtti munka mellett tartós szemkomfortot szeretne</li>
+      </ul>
+      <p class="note">A látásterápia nem helyettesíti a szemorvosi vizsgálatot. Szembetegség gyanúja esetén először szemorvoshoz irányítjuk, és szükség esetén vele együttműködve dolgozunk.</p>
+    </div>
+  </section>
+
+  <!-- HOGYAN ZAJLIK -->
+  <section id="menete" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Hogyan zajlik?</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>Időpontfoglalás</h3>
+          <p>Válasszon időpontot online, néhány kattintással – azonnal visszaigazolást kap e-mailben.</p>
+        </div>
+        <div class="step">
+          <h3>Funkcionális látásvizsgálat</h3>
+          <p>Alapos felmérés, amely a látási készségeket vizsgálja. Megbeszéljük az eredményeket és azt, hogy segíthet-e a terápia.</p>
+        </div>
+        <div class="step">
+          <h3>Egyéni terápiás terv</h3>
+          <p>Személyre szabott program rendelői foglalkozásokkal és rövid, napi otthoni gyakorlatokkal.</p>
+        </div>
+        <div class="step">
+          <h3>Követés</h3>
+          <p>Rendszeres kontrollmérésekkel követjük a fejlődést, és szükség szerint igazítjuk a programot.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SZOLGÁLTATÁSOK -->
+  <section id="szolgaltatasok">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Szolgáltatások és árak</h2>
+        <p>Az árak tájékoztató jellegűek. <!-- SZERKESZTENDŐ: valós árak és időtartamok --></p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <h3>Funkcionális látásvizsgálat</h3>
+          <p>A látási készségek részletes felmérése, az eredmények átbeszélése és javaslat a további lépésekre.</p>
+          <span class="price">00 000 Ft · 60–90 perc</span>
+        </div>
+        <div class="card">
+          <h3>Látásterápiás foglalkozás</h3>
+          <p>Egyéni, személyre szabott foglalkozás a terápiás terv alapján, otthoni gyakorlatokkal kiegészítve.</p>
+          <span class="price">00 000 Ft · 45 perc</span>
+        </div>
+        <div class="card">
+          <h3>Kontrollvizsgálat</h3>
+          <p>A fejlődés mérése a program közben vagy végén, a terápiás terv frissítése.</p>
+          <span class="price">00 000 Ft · 30–45 perc</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RÓLAM -->
+  <section id="rolam" class="alt">
+    <div class="wrap about-grid">
+      <div class="about-img">Portré</div>
+      <div>
+        <div class="section-head" style="margin-bottom:20px">
+          <h2>Rólam</h2>
+        </div>
+        <!-- SZERKESZTENDŐ: név, végzettség, tapasztalat -->
+        <p><strong>[Név]</strong> vagyok, [végzettség, pl. optometrista / látásterapeuta]. [X] éve foglalkozom a látás fejlesztésével, gyermekekkel és felnőttekkel egyaránt.</p>
+        <p>Hiszem, hogy a jó látás a tanulás, a munka és a mindennapi jóllét alapja. Nyugodt, barátságos környezetben, minden pácienssel egyénileg foglalkozom, és a szülőket is bevonom a gyermekek fejlesztésébe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GYIK -->
+  <section id="gyik">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Gyakori kérdések</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Miben más ez, mint egy szemüvegvizsgálat?</summary>
+          <p>A szemüvegvizsgálat elsősorban azt nézi, milyen élesen lát. A funkcionális látásvizsgálat azt is méri, hogyan működik együtt a két szem, mennyire kitartó a fókuszálás és mennyire pontosak a szemmozgások.</p>
+        </details>
+        <details>
+          <summary>Hány éves kortól ajánlott?</summary>
+          <p>Általában iskoláskor előttől (kb. 5–6 éves kortól) felnőttkorig. A felmérésen megbeszéljük, hogy az adott életkorban mi a legmegfelelőbb.</p>
+        </details>
+        <details>
+          <summary>Mennyi ideig tart egy terápia?</summary>
+          <p>Ez egyénenként változik. A felmérés után tájékoztatást adunk a várható időtartamról és a foglalkozások gyakoriságáról.</p>
+        </details>
+        <details>
+          <summary>Mit hozzak magammal az első alkalomra?</summary>
+          <p>Jelenlegi szemüvegét vagy kontaktlencséjét, valamint korábbi szemészeti leleteit, ha vannak.</p>
+        </details>
+        <details>
+          <summary>Hogyan tudom lemondani vagy módosítani az időpontot?</summary>
+          <p>A visszaigazoló e-mailben található linken, vagy írjon / hívjon minket legalább 24 órával előtte.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOGLALÁS -->
+  <section id="foglalas" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Időpontfoglalás</h2>
+        <p>Válassza ki az Önnek megfelelő időpontot – a visszaigazolást azonnal megkapja e-mailben.</p>
+      </div>
+      <div class="booking-box">
+        <!--
+          SZERKESZTENDŐ: ide kerül a foglalási naptár.
+          Google Naptár: időpontfoglalási naptár → Megosztás → „Webhelyre ágyazás” → „Beágyazott” → az <iframe> kódot
+          másold be az alábbi placeholder div helyére. Így néz ki:
+          <iframe src="https://calendar.google.com/calendar/appointments/schedules/XXXXXXXX?gv=true"></iframe>
+          Cal.com esetén: <iframe src="https://cal.com/FELHASZNALONEV/felmeres"></iframe>
+        -->
+        <div class="booking-placeholder">
+          <p>Itt jelenik meg a foglalási naptár.</p>
+          <a href="#" class="btn">Foglalási oldal megnyitása</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KAPCSOLAT -->
+  <section id="kapcsolat">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Kapcsolat</h2>
+        <p>Kérdése van foglalás előtt? Keressen bizalommal.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <h3>E-mail</h3>
+          <a href="mailto:info@optivista.hu">info@optivista.hu</a>
+        </div>
+        <div class="contact-item">
+          <h3>Telefon</h3>
+          <!-- SZERKESZTENDŐ -->
+          <a href="tel:+36000000000">+36 00 000 0000</a>
+        </div>
+        <div class="contact-item">
+          <h3>Cím</h3>
+          <!-- SZERKESZTENDŐ -->
+          <p>[Utca, házszám]<br>[Irányítószám] [Település]</p>
+        </div>
+        <div class="contact-item">
+          <h3>Rendelési idő</h3>
+          <!-- SZERKESZTENDŐ -->
+          <p>H–P: 9:00–17:00<br>Előzetes bejelentkezés alapján</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      © <span id="ev"></span> OptiVista Látásterápia · optivista.hu
+    </div>
+  </footer>
+
+  <script>document.getElementById("ev").textContent = new Date().getFullYear();</script>
+</body>
+</html>
