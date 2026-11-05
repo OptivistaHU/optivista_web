@@ -5,6 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OptiVista – Látásterápia gyermekeknek és felnőtteknek</title>
   <meta name="description" content="OptiVista látásterápia: funkcionális látásvizsgálat és egyéni látásfejlesztő program gyermekeknek és felnőtteknek. Foglaljon időpontot online.">
+  <link rel="canonical" href="https://optivista.hu/">
+  <meta name="theme-color" content="#1f7a7a">
+
+  <!-- Böngészőfül ikon (egyszerű szem-ikon, később cserélhető logo.png-re) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f7a7a'/%3E%3Cpath d='M8 32c6-10 14-15 24-15s18 5 24 15c-6 10-14 15-24 15S14 42 8 32z' fill='%23fff'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%231f7a7a'/%3E%3C/svg%3E">
+
+  <!-- Megosztási előnézet (Facebook, Messenger, Viber stb.) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="hu_HU">
+  <meta property="og:url" content="https://optivista.hu/">
+  <meta property="og:title" content="OptiVista – Látásterápia gyermekeknek és felnőtteknek">
+  <meta property="og:description" content="Funkcionális látásvizsgálat és egyéni látásfejlesztő program. Foglaljon időpontot online.">
+  <!-- SZERKESZTENDŐ: ha lesz egy 1200×630 px-es kép, töltsd fel és vedd ki a megjegyzésből -->
+  <!-- <meta property="og:image" content="https://optivista.hu/megosztas.jpg"> -->
+
+  <!-- Google számára: helyi vállalkozás adatai (töltsd ki, ha megvannak a valós adatok) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "OptiVista Látásterápia",
+    "url": "https://optivista.hu/",
+    "email": "info@optivista.hu",
+    "telephone": "+36000000000",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "[Utca, házszám]",
+      "postalCode": "[Irányítószám]",
+      "addressLocality": "[Település]",
+      "addressCountry": "HU"
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -160,7 +193,9 @@
       border: 1px solid var(--line);
       box-shadow: 0 10px 40px rgba(20, 50, 60, 0.06);
     }
-    .booking-box iframe { width: 100%; height: 640px; border: 0; border-radius: 12px; display: block; }
+    #cal-inline { width: 100%; min-height: 0; overflow: hidden; border-radius: 12px; }
+    .booking-box.loaded #cal-inline { min-height: 640px; }
+    .booking-box.loaded #booking-fallback { display: none; }
     .booking-placeholder {
       height: 320px; display: flex; flex-direction: column; gap: 16px;
       align-items: center; justify-content: center; text-align: center;
@@ -173,11 +208,45 @@
     .contact-item p, .contact-item a { font-size: 1.05rem; color: var(--ink); text-decoration: none; }
     .contact-item a:hover { color: var(--accent); }
 
-    footer { padding: 32px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; text-align: center; }
+    footer { padding: 40px 0 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+    .footer-grid { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); }
+    .footer-links a:hover { color: var(--accent); }
+    .imprint { margin-top: 20px; font-size: 0.82rem; line-height: 1.6; }
+
+    /* Mobil menü gomb */
+    .menu-toggle {
+      display: none; background: none; border: 0; cursor: pointer;
+      width: 44px; height: 44px; border-radius: 10px;
+      align-items: center; justify-content: center;
+    }
+    .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after {
+      display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px;
+      position: relative; transition: transform 0.2s, background 0.2s;
+    }
+    .menu-toggle span::before, .menu-toggle span::after { content: ""; position: absolute; left: 0; }
+    .menu-toggle span::before { top: -7px; }
+    .menu-toggle span::after { top: 7px; }
+    .nav.open .menu-toggle span { background: transparent; }
+    .nav.open .menu-toggle span::before { transform: translateY(7px) rotate(45deg); }
+    .nav.open .menu-toggle span::after { transform: translateY(-7px) rotate(-45deg); }
 
     /* Mobil */
     @media (max-width: 860px) {
-      .nav ul li:not(:last-child) { display: none; }
+      .menu-toggle { display: flex; }
+      .nav ul {
+        display: none;
+        position: absolute; top: 68px; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0;
+        background: var(--bg); border-bottom: 1px solid var(--line);
+        padding: 8px 24px 20px;
+        box-shadow: 0 12px 24px rgba(20, 50, 60, 0.08);
+      }
+      .nav.open ul { display: flex; }
+      .nav ul a { display: block; padding: 12px 0; font-size: 1.05rem; }
+      .nav ul li:last-child { margin-top: 8px; }
+      .nav ul .btn.small { text-align: center; padding: 12px 18px; }
       .hero { padding: 56px 0; }
       .hero-grid, .about-grid, .intro-grid { grid-template-columns: 1fr; gap: 36px; }
       .hero-img { aspect-ratio: 16 / 10; }
@@ -191,7 +260,8 @@
   <header>
     <div class="wrap nav">
       <a href="#" class="logo">Opti<span>Vista</span></a>
-      <ul>
+      <button class="menu-toggle" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="fomenu"><span></span></button>
+      <ul id="fomenu">
         <li><a href="#latasterapia">Látásterápia</a></li>
         <li><a href="#szolgaltatasok">Szolgáltatások</a></li>
         <li><a href="#rolam">Rólam</a></li>
@@ -369,16 +439,12 @@
         <p>Válassza ki az Önnek megfelelő időpontot – a visszaigazolást azonnal megkapja e-mailben.</p>
       </div>
       <div class="booking-box">
-        <!--
-          SZERKESZTENDŐ: ide kerül a foglalási naptár.
-          Google Naptár: időpontfoglalási naptár → Megosztás → „Webhelyre ágyazás” → „Beágyazott” → az <iframe> kódot
-          másold be az alábbi placeholder div helyére. Így néz ki:
-          <iframe src="https://calendar.google.com/calendar/appointments/schedules/XXXXXXXX?gv=true"></iframe>
-          Cal.com esetén: <iframe src="https://cal.com/FELHASZNALONEV/felmeres"></iframe>
-        -->
-        <div class="booking-placeholder">
-          <p>Itt jelenik meg a foglalási naptár.</p>
-          <a href="#" class="btn">Foglalási oldal megnyitása</a>
+        <!-- Ide tölti be a Cal.com a szabad időpontokat (a lap alján lévő CAL_USER beállítás alapján) -->
+        <div id="cal-inline"></div>
+        <!-- Ez akkor látszik, ha még nincs beállítva a Cal.com, vagy nem tölt be a naptár -->
+        <div class="booking-placeholder" id="booking-fallback">
+          <p>Itt jelenik meg a foglalási naptár a szabad időpontokkal.</p>
+          <a href="#" class="btn" id="booking-link" target="_blank" rel="noopener">Foglalási oldal megnyitása</a>
         </div>
       </div>
     </div>
@@ -417,10 +483,73 @@
 
   <footer>
     <div class="wrap">
-      © <span id="ev"></span> OptiVista Látásterápia · optivista.hu
+      <div class="footer-grid">
+        <div>© <span id="ev"></span> OptiVista Látásterápia · optivista.hu</div>
+        <div class="footer-links">
+          <!-- SZERKESZTENDŐ: adatkezelési tájékoztató (külön oldal vagy PDF, pl. adatkezeles.html) -->
+          <a href="adatkezeles.html">Adatkezelési tájékoztató</a>
+          <a href="#impresszum">Impresszum</a>
+        </div>
+      </div>
+      <!-- SZERKESZTENDŐ: kötelező szolgáltatói adatok (vállalkozás neve, székhelye, nyilvántartási szám, adószám, tárhelyszolgáltató) -->
+      <p class="imprint" id="impresszum">
+        <strong>Impresszum</strong> · Szolgáltató: [Vállalkozás neve] · Székhely: [Cím] ·
+        Nyilvántartási szám / cégjegyzékszám: [szám] · Adószám: [adószám] · E-mail: info@optivista.hu ·
+        Tárhelyszolgáltató: GitHub, Inc., 88 Colin P. Kelly Jr. St, San Francisco, CA 94107, USA
+      </p>
     </div>
   </footer>
 
-  <script>document.getElementById("ev").textContent = new Date().getFullYear();</script>
+  <!-- ===== IDŐPONTFOGLALÁS (Cal.com) =====
+       SZERKESZTENDŐ: írd be a Cal.com felhasználónevet (cal.com/EZ-A-RÉSZ).
+       Ha üresen marad, a helyőrző doboz látszik. -->
+  <script>
+    const CAL_USER = "";            // pl. "optivista"
+    const CAL_COLOR = "#1f7a7a";    // a gombok/kiemelések színe a naptárban
+
+    const bookingLink = document.getElementById("booking-link");
+    if (CAL_USER) {
+      bookingLink.href = "https://cal.com/" + CAL_USER;
+
+      // A Cal.com hivatalos beágyazó kódja
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+
+      Cal("init", { origin: "https://cal.com" });
+      Cal("inline", {
+        elementOrSelector: "#cal-inline",
+        calLink: CAL_USER,
+        config: { layout: "month_view" }
+      });
+      Cal("ui", {
+        theme: "light",
+        cssVarsPerTheme: { light: { "cal-brand": CAL_COLOR } },
+        hideEventTypeDetails: false,
+        layout: "month_view"
+      });
+      // Ha a naptár betöltött, elrejtjük a helyőrzőt
+      Cal("on", { action: "linkReady", callback: () => {
+        document.querySelector(".booking-box").classList.add("loaded");
+      }});
+    }
+  </script>
+
+  <script>
+    document.getElementById("ev").textContent = new Date().getFullYear();
+
+    // Mobil menü nyitása/zárása
+    const nav = document.querySelector(".nav");
+    const toggle = document.querySelector(".menu-toggle");
+    toggle.addEventListener("click", () => {
+      const open = nav.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", open);
+      toggle.setAttribute("aria-label", open ? "Menü bezárása" : "Menü megnyitása");
+    });
+    // Linkre kattintva bezárul
+    nav.querySelectorAll("ul a").forEach(a => a.addEventListener("click", () => {
+      nav.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Menü megnyitása");
+    }));
+  </script>
 </body>
 </html>
